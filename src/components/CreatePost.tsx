@@ -1,43 +1,43 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
-import { useState } from "react";
-import { Card, CardContent } from "./ui/card";
-import { Avatar, AvatarImage } from "./ui/avatar";
-import { Textarea } from "./ui/textarea";
 import { createPost } from "@/actions/post.action";
-import toast from "react-hot-toast";
-import { Button } from "./ui/button";
+import { useUser } from "@clerk/nextjs";
 import { ImageIcon, Loader2Icon, SendIcon } from "lucide-react";
-
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { Avatar, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
+import { Card, CardContent } from "./ui/card";
+import { Textarea } from "./ui/textarea";
 
 function CreatePost() {
-    const {user} = useUser();
-    const [content,setContent] = useState("");
-    const [imageUrl,setImageUrl] = useState("");
-    const [isPosting,setIsPosting] = useState(false);
-    const [showImageUpload,setShowImageUpload] = useState(false);
+  const { user } = useUser();
+  const [content, setContent] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [isPosting, setIsPosting] = useState(false);
+  const [showImageUpload, setShowImageUpload] = useState(false);
 
-    const handleSubmit = async ()=> {
-        if(!content.trim() && !imageUrl){
-            return;
-        }
-        setIsPosting(true);
-        try {
-            const result = await createPost(content,imageUrl);
-            if (result.success){
-                setContent("");
-                setImageUrl("");
-                setShowImageUpload(false);
-                toast.success("Post created successfully");
-            }
-        } catch (error) {
-            console.error("Failed to create post:",error);
-            toast.error("Failed to create post");
-        } finally{
-            setIsPosting(false);
-        }
+  const handleSubmit = async () => {
+    if (!content.trim() && !imageUrl) return;
+
+    setIsPosting(true);
+    try {
+      const result = await createPost(content, imageUrl);
+      if (result?.success) {
+        // reset the form
+        setContent("");
+        setImageUrl("");
+        setShowImageUpload(false);
+
+        toast.success("Post created successfully");
+      }
+    } catch (error) {
+      console.error("Failed to create post:", error);
+      toast.error("Failed to create post");
+    } finally {
+      setIsPosting(false);
     }
+  };
 
   return (
     <Card className="mb-6">
@@ -91,7 +91,6 @@ function CreatePost() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
-
-export default CreatePost
+export default CreatePost;
