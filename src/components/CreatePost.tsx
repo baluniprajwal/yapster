@@ -9,6 +9,7 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Textarea } from "./ui/textarea";
+import ImageUpload from "./ImageUpload";
 
 function CreatePost() {
   const { user } = useUser();
@@ -55,7 +56,18 @@ function CreatePost() {
               disabled={isPosting}
             />
           </div>
-
+          {(showImageUpload || imageUrl) && (
+            <div className="border rounded-lg p-4">
+              <ImageUpload
+                endpoint="postImage"
+                value={imageUrl}
+                onChange={(url) => {
+                  setImageUrl(url);
+                  if (!url) setShowImageUpload(false);
+                }}
+              />
+            </div>
+          )}
           <div className="flex items-center justify-between border-t pt-4">
             <div className="flex space-x-2">
               <Button
